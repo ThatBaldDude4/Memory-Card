@@ -26,11 +26,32 @@ export default function CardsContainer() {
         })
     }, [pokemonArray]);
 
+    function handleShuffle() {
+        if (data.length === 0) {return};
+        setData(shuffle(data));
+    }
+
     return (
         <div className="cards-container">
             {data.map((pokemon) => {
-                return <Card name={pokemon.name} image={pokemon.image} key={`${pokemon.name}${pokemon.image}`}/>
+                return <Card 
+                    name={pokemon.name} 
+                    image={pokemon.image} 
+                    key={`${pokemon.name}${pokemon.image}`}
+                    onClick={handleShuffle}
+                />
             })}
         </div>
     )
+}
+
+function shuffle(array) {
+  const shuffled = [...array]; 
+  
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  };
+
+  return shuffled;
 }
