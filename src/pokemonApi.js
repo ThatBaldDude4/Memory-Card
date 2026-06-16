@@ -11,6 +11,7 @@ export default function getPokemonData(pokemonArray) {
 function parseData(data) {
     return {
         name: data.name,
-        image: data.sprites.front_default
+        image: data.sprites.front_default,
+        id: crypto.randomUUID(),
     };
 }
