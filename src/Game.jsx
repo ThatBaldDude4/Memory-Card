@@ -1,6 +1,7 @@
 import getPokemonData from "./pokemonApi";
 import { useState, useEffect } from "react";
 import Card from "./Card";
+import './gameStyles.css';
 
 const pokemonArray = [
   "bulbasaur",
@@ -17,52 +18,60 @@ const pokemonArray = [
   "eevee"
 ];
 
-export default function Game(props) {
+export default function Game({setIsLoading}) {
     const [data, setData] = useState([]);
     const [clickedCardIds, setClickedCardIds] = useState([]);
     const [bestScore, setBestScore] = useState(0);
     const [currentScore, setCurrentScore] = useState(0);
-    const clickedCards = props
-
+    const isLoading = data.length === 0;
 
     useEffect(() => {
         getPokemonData(pokemonArray).then((data) => {
             setData(data);
+        }).catch((err) => {
+            console.error('Failed to retrieve data');
         })
     }, [pokemonArray]);
 
     function handleResetGame() {
         setCurrentScore(0)
         setClickedCardIds([]);
-    }
-
-
-    function handleShuffle(e, id) {
-        if (data.length === 0) {return};
-        if (clickedCardIds.includes(id)) {handleResetGame()};
-
-        setCurrentScore(prev => prev + 1);
-        setClickedCardIds(prev => [...prev, id]);
-        setData(shuffle(data));
-
-        if (bestScore < currentScore) {
+        if (currentScore > bestScore) {
             setBestScore(currentScore);
         }
     }
 
+
+    function handleCardClick(id) {
+        if (data.length === 0) {return};
+        if (clickedCardIds.includes(id)) {
+            handleResetGame()
+            return;
+        };
+
+        setCurrentScore(prev => prev + 1);
+        setClickedCardIds(prev => [...prev, id]);
+        setData(shuffle(data));
+    }
+
     return (
-        <div className="cards-container">
-            <p>Best Score: {bestScore}</p>
-            <p>Current Score: {currentScore}</p>
-            {data.map((pokemon) => {
-                return <Card 
-                    name={pokemon.name} 
-                    image={pokemon.image} 
-                    key={pokemon.id}
-                    onClick={(e) => {handleShuffle(e, pokemon.id)}}
-                />
-            })}
-        </div>
+        <>
+        {/* Data is hydrated */}
+        {!isLoading &&
+            <div className="cards-container">
+                <p>Best Score: {bestScore}</p>
+                <p>Current Score: {currentScore}</p>
+                {data.map((pokemon) => {
+                    return <Card 
+                        name={pokemon.name} 
+                        image={pokemon.image} 
+                        key={pokemon.id}
+                        onClick={() => {handleCardClick(pokemon.id)}}
+                    />
+                })}
+            </div>
+        }
+        </>
     )
 }
 
@@ -76,7 +85,3 @@ function shuffle(array) {
 
   return shuffled;
 }
-
-// id is added to clicked array even if in array
-// clicked array not properly checking id
-// Game doesn't reset when card clicked twice
