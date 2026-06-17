@@ -17,9 +17,11 @@ const pokemonArray = [
   "eevee"
 ];
 
-export default function CardsContainer(props) {
+export default function Game(props) {
     const [data, setData] = useState([]);
     const [clickedCardIds, setClickedCardIds] = useState([]);
+    const [bestScore, setBestScore] = useState(0);
+    const [currentScore, setCurrentScore] = useState(0);
     const clickedCards = props
 
 
@@ -29,29 +31,29 @@ export default function CardsContainer(props) {
         })
     }, [pokemonArray]);
 
-
-    function handleShuffle(e, id) {
-        if (data.length === 0) {return};
-
-        const beenClicked = clickedCardIds.includes(id)
-        if (beenClicked) {
-            props.handleResetGame();
-            setClickedCardIds([]);
-        }
-
-        props.setCurrentScore(prev => prev + 1);
-        setClickedCardIds(prev => [...prev, id]);
-        setData(shuffle(data));
-
-        if (props.bestScore < props.currentScore) {
-            props.setBestScore(props.currentScore);
-        }
+    function handleResetGame() {
+        setCurrentScore(0)
+        setClickedCardIds([]);
     }
 
 
-    console.log(data);
+    function handleShuffle(e, id) {
+        if (data.length === 0) {return};
+        if (clickedCardIds.includes(id)) {handleResetGame()};
+
+        setCurrentScore(prev => prev + 1);
+        setClickedCardIds(prev => [...prev, id]);
+        setData(shuffle(data));
+
+        if (bestScore < currentScore) {
+            setBestScore(currentScore);
+        }
+    }
+
     return (
         <div className="cards-container">
+            <p>Best Score: {bestScore}</p>
+            <p>Current Score: {currentScore}</p>
             {data.map((pokemon) => {
                 return <Card 
                     name={pokemon.name} 
