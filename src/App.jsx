@@ -1,5 +1,4 @@
 import Game from './Game';
-import { useState } from 'react';
 
 function App() {
   return (

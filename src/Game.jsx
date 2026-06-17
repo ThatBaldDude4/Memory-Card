@@ -24,14 +24,16 @@ export default function Game({setIsLoading}) {
     const [bestScore, setBestScore] = useState(0);
     const [currentScore, setCurrentScore] = useState(0);
     const isLoading = data.length === 0;
+    const hasWon = data.length === currentScore && data.length > 0;
 
     useEffect(() => {
         getPokemonData(pokemonArray).then((data) => {
-            setData(data);
+            const shuffled = shuffle(data);
+            setData(shuffled);
         }).catch((err) => {
             console.error('Failed to retrieve data');
         })
-    }, [pokemonArray]);
+    }, []);
 
     function handleResetGame() {
         setCurrentScore(0)
@@ -49,9 +51,15 @@ export default function Game({setIsLoading}) {
             return;
         };
 
-        setCurrentScore(prev => prev + 1);
+        const nextScore = currentScore + 1;
+
+        setCurrentScore(nextScore);
         setClickedCardIds(prev => [...prev, id]);
         setData(shuffle(data));
+        
+        if (nextScore === data.length) {
+            alert("Congrats you have good memory");
+        }
     }
 
     return (
@@ -79,6 +87,7 @@ export default function Game({setIsLoading}) {
                 })}
             </div>
         }
+        {}
         </>
     )
 }
