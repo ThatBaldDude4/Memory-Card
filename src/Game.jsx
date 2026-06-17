@@ -56,10 +56,6 @@ export default function Game({setIsLoading}) {
         setCurrentScore(nextScore);
         setClickedCardIds(prev => [...prev, id]);
         setData(shuffle(data));
-        
-        if (nextScore === data.length) {
-            alert("Congrats you have good memory");
-        }
     }
 
     return (
@@ -87,7 +83,12 @@ export default function Game({setIsLoading}) {
                 })}
             </div>
         }
-        {}
+        {hasWon && (
+            <div>
+                <h2>You won!</h2>
+                <button onClick={handleResetGame}>Play Again</button>
+            </div>
+        )}
         </>
     )
 }
