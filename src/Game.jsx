@@ -56,6 +56,12 @@ export default function Game({setIsLoading}) {
 
     return (
         <>
+        {isLoading && 
+            <div className="loading-container">
+                Catching Pokemon...
+                <div className="circle"></div>
+            </div>
+        }
         {/* Data is hydrated */}
         {!isLoading &&
             <div className="cards-container">
