@@ -65,8 +65,10 @@ export default function Game({setIsLoading}) {
         {/* Data is hydrated */}
         {!isLoading &&
             <div className="cards-container">
-                <p>Best Score: {bestScore}</p>
-                <p>Current Score: {currentScore}</p>
+                <div className="score-container">
+                    <p>Best Score: {bestScore}</p>
+                    <p>Current Score: {currentScore}</p>
+                </div>
                 {data.map((pokemon) => {
                     return <Card 
                         name={pokemon.name} 

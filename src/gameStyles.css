@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     position: relative;
     width: 100vw;
@@ -6,9 +10,32 @@ body {
     padding: 0;
 }
 
+.cards-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 20px;
+}
+
 .pokemon-card {
     border: 2px solid black;
     border-radius: 20px;
+    width: clamp(120px, 200px, 200px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score-container {
+    width: 100%;
+    text-align: center;
+    font-size: 40px;
+}
+
+.score-container > p {
+    margin: 20px 0;
 }
 
 .loading-container {
