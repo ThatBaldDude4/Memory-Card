@@ -31,17 +31,18 @@ export default function CardsContainer(props) {
 
 
     function handleShuffle(e, id) {
-        console.log(id)
         if (data.length === 0) {return};
-        const beenClicked = clickedCardIds.includes(id)
-        console.log(clickedCardIds)
 
+        const beenClicked = clickedCardIds.includes(id)
         if (beenClicked) {
             props.handleResetGame();
+            setClickedCardIds([]);
         }
-        props.setBestScore(prev => prev + 1);
+
+        props.setCurrentScore(prev => prev + 1);
         setClickedCardIds(prev => [...prev, id]);
         setData(shuffle(data));
+
         if (props.bestScore < props.currentScore) {
             props.setBestScore(props.currentScore);
         }
