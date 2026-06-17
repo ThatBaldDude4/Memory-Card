@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import Game from './CardsContainer'
+import Game from './Game'
 
 function App() {
   return (
