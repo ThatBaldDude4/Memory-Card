@@ -23,8 +23,9 @@ export default function Game({setIsLoading}) {
     const [clickedCardIds, setClickedCardIds] = useState([]);
     const [bestScore, setBestScore] = useState(0);
     const [currentScore, setCurrentScore] = useState(0);
+    const [isHardMode, setIsHardMode] = useState(false);
     const isLoading = data.length === 0;
-    const hasWon = data.length === currentScore && data.length > 0;
+    const hasWon = currentScore >= data.length  && data.length > 0;
 
     useEffect(() => {
         getPokemonData(pokemonArray).then((data) => {
@@ -35,12 +36,13 @@ export default function Game({setIsLoading}) {
         })
     }, []);
 
-    function handleResetGame() {
+    function handleResetGame(isDifficult) {
         setCurrentScore(0)
         setClickedCardIds([]);
         if (currentScore > bestScore) {
             setBestScore(currentScore);
         }
+        setIsHardMode(isDifficult);
     }
 
 
@@ -74,19 +76,23 @@ export default function Game({setIsLoading}) {
                     <p>Current Score: {currentScore}</p>
                 </div>
                 {data.map((pokemon) => {
+                    const rotation = Math.floor(Math.random() * 300);
                     return <Card 
                         name={pokemon.name} 
                         image={pokemon.image} 
                         key={pokemon.id}
                         onClick={() => {handleCardClick(pokemon.id)}}
+                        rotation={rotation}
+                        isHardMode={isHardMode}
                     />
                 })}
             </div>
         }
         {hasWon && (
-            <div>
+            <div className="win-container">
                 <h2>You won!</h2>
                 <button onClick={handleResetGame}>Play Again</button>
+                <button onClick={() => {handleResetGame(true)}}>Hard Mode</button>
             </div>
         )}
         </>

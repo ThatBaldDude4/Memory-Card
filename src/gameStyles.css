@@ -20,12 +20,18 @@ body {
 }
 
 .pokemon-card {
-    border: 2px solid black;
+    border: 5px solid black;
     border-radius: 20px;
     width: clamp(120px, 200px, 200px);
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.pokemon-card > img {
+    width: 60%;
+    margin: 5px;
+    background-color: grey;
 }
 
 .score-container {
