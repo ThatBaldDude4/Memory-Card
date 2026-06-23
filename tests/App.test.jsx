@@ -1,7 +1,11 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import Card from '../src/Card.jsx';
+import Game from "../src/Game.jsx";
+import getPokemonData from "../src/pokemonApi.js";
+
+vi.mock("../src/pokemonApi.js");
 
 const mockCard = {
     name: `pika`,
@@ -34,4 +38,27 @@ describe("Card component", () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   })
 });
-// need to get async function working
+
+describe("Game component", () => {
+  it ("renders loading screen", () => {
+    vi.mocked(getPokemonData).mockReturnValueOnce(new Promise(() => {}));
+    render(<Game setIsLoading={vi.fn()}/>)
+    const game = screen.getByRole('status');
+
+    expect(game).toHaveTextContent("Catching Pokemon...");
+  })
+
+  it("renders score container after loading pokemon data", async () => {
+  const mockPokemon = [
+    { id: 1, name: "bulbasaur", image: "url1" }
+  ];
+  
+  // 3. Vitest uses 'mockResolvedValueOnce' exactly like Jest!
+  vi.mocked(getPokemonData).mockResolvedValueOnce(mockPokemon);
+
+  render(<Game setIsLoading={vi.fn()} />); // Use vi.fn() for dummy functions
+
+  const bestScore = await screen.findByTestId("best-score-container");
+  expect(bestScore).toHaveTextContent("Best Score: 0");
+});
+})

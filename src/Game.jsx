@@ -63,7 +63,7 @@ export default function Game({setIsLoading}) {
     return (
         <>
         {isLoading && 
-            <div className="loading-container">
+            <div role="status" className="loading-container">
                 Catching Pokemon...
                 <div className="circle"></div>
             </div>
@@ -72,7 +72,7 @@ export default function Game({setIsLoading}) {
         {!isLoading &&
             <div className="cards-container">
                 <div className="score-container">
-                    <p>Best Score: {bestScore}</p>
+                    <p data-testid="best-score-container">Best Score: {bestScore}</p>
                     <p>Current Score: {currentScore}</p>
                 </div>
                 {data.map((pokemon) => {
