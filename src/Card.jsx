@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 export default function Card({name, image, onClick, rotation, isHardMode}) {
     // if hard mode apply unique styles
     const customStyle = !isHardMode ? {} : {

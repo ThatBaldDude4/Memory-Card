@@ -19,7 +19,7 @@ const pokemonArray = [
   "eevee"
 ];
 
-export default function Game({setIsLoading}) {
+export default function Game() {
     const [data, setData] = useState([]);
     const [clickedCardIds, setClickedCardIds] = useState([]);
     const [bestScore, setBestScore] = useState(0);
@@ -33,7 +33,7 @@ export default function Game({setIsLoading}) {
             const shuffled = shuffle(data);
             setData(shuffled);
         }).catch((err) => {
-            console.error('Failed to retrieve data');
+            console.error('Failed to retrieve data', err);
         })
     }, []);
 
