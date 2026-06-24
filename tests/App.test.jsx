@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import Card from '../src/Card.jsx';
 import Game from "../src/Game.jsx";
+import WinDialog from "../src/WinDialog.jsx";
 import getPokemonData from "../src/pokemonApi.js";
 
 vi.mock("../src/pokemonApi.js");
@@ -53,12 +54,49 @@ describe("Game component", () => {
     { id: 1, name: "bulbasaur", image: "url1" }
   ];
   
-  // 3. Vitest uses 'mockResolvedValueOnce' exactly like Jest!
   vi.mocked(getPokemonData).mockResolvedValueOnce(mockPokemon);
 
-  render(<Game setIsLoading={vi.fn()} />); // Use vi.fn() for dummy functions
+  render(<Game setIsLoading={vi.fn()} />);
 
   const bestScore = await screen.findByTestId("best-score-container");
   expect(bestScore).toHaveTextContent("Best Score: 0");
 });
+});
+
+describe("WinDialog component", () => {
+    it ("renders play again", () => {
+        render(<WinDialog handleResetGame={() => {}}/>);
+        const button = screen.getByText("Play Again");
+        expect(button).toHaveTextContent("Play Again");
+    })
+
+    it ("renders hard mode button", () => {
+        render(<WinDialog handleResetGame={() => {}}/>);
+        const button = screen.getByText("Hard Mode");
+        expect(button).toHaveTextContent("Hard Mode");
+    });
+
+    it ("play again gets called", async () => {
+        const user = userEvent.setup();
+        const handleClick = vi.fn();
+        render(<WinDialog handleResetGame={handleClick}/>);
+
+        const button = screen.getByText("Play Again");
+        await user.click(button);
+        await user.click(button);
+
+        expect(handleClick).toHaveBeenCalledWith(false);
+    })
+
+    it ("hard mode gets called", async () => {
+        const user = userEvent.setup();
+        const handleClick = vi.fn();
+        render(<WinDialog handleResetGame={handleClick}/>);
+
+        const button = screen.getByText("Hard Mode");
+        await user.click(button);
+        await user.click(button);
+
+        expect(handleClick).toHaveBeenCalledWith(true);
+    })
 })
