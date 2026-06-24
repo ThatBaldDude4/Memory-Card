@@ -1,6 +1,7 @@
 import getPokemonData from "./pokemonApi";
 import { useState, useEffect } from "react";
 import Card from "./Card";
+import WinDialog from "./WinDialog";
 import './gameStyles.css';
 
 const pokemonArray = [
@@ -88,13 +89,7 @@ export default function Game({setIsLoading}) {
                 })}
             </div>
         }
-        {hasWon && (
-            <div className="win-container">
-                <h2>You won!</h2>
-                <button onClick={() => {handleResetGame(false)}}>Play Again</button>
-                <button onClick={() => {handleResetGame(true)}}>Hard Mode</button>
-            </div>
-        )}
+        {hasWon && <WinDialog handleResetGame={handleResetGame}/>}
         </>
     )
 }
