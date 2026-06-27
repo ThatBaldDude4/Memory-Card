@@ -1,10 +1,11 @@
 import getPokemonData from "./pokemonApi";
 import { useState, useEffect } from "react";
+import { Link } from "react-router";
 import Card from "./Card";
 import WinDialog from "./WinDialog";
 import './gameStyles.css';
 
-const pokemonArray = [
+export const pokemonArray = [
   "bulbasaur",
   "charmander",
   "squirtle",
@@ -63,6 +64,7 @@ export default function Game() {
 
     return (
         <>
+        <Link to="/rules">Rules</Link>
         {isLoading && 
             <div role="status" className="loading-container">
                 Catching Pokemon...
@@ -94,7 +96,7 @@ export default function Game() {
     )
 }
 
-function shuffle(array) {
+export function shuffle(array) {
   const shuffled = [...array]; 
   
   for (let i = shuffled.length - 1; i > 0; i--) {

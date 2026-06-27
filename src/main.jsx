@@ -1,9 +1,30 @@
-import { StrictMode } from 'react';
+import { Component, StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from "react-router";
 import App from './App.jsx';
+import RouterComponent from './RouterComponent.jsx';
+import Game from './Game';
+import Rules from './Rules.jsx';
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <RouterComponent />,
+        children: [
+            {
+                index: true,
+                element: <Game />,
+            },
+            {
+                path: "/rules",
+                element: <Rules />,
+            }
+        ]
+    },
+])
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <RouterProvider router={router}/>
   </StrictMode>,
 )
