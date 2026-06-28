@@ -2,21 +2,16 @@ import { Component, StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router";
 import App from './App.jsx';
-import RouterComponent from './RouterComponent.jsx';
 import Game from './Game';
 import Rules from './Rules.jsx';
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <RouterComponent />,
+        element: <Game />,
         children: [
             {
-                index: true,
-                element: <Game />,
-            },
-            {
-                path: "/rules",
+                path: "rules",
                 element: <Rules />,
             }
         ]

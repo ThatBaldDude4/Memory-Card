@@ -1,11 +1,11 @@
 import getPokemonData from "./pokemonApi";
 import { useState, useEffect } from "react";
-import { Link } from "react-router";
+import { Link, Outlet, useMatch } from "react-router";
 import Card from "./Card";
 import WinDialog from "./WinDialog";
 import './gameStyles.css';
 
-export const pokemonArray = [
+const pokemonArray = [
   "bulbasaur",
   "charmander",
   "squirtle",
@@ -28,6 +28,7 @@ export default function Game() {
     const [isHardMode, setIsHardMode] = useState(false);
     const isLoading = data.length === 0;
     const hasWon = currentScore >= data.length  && data.length > 0;
+    const isRules = useMatch("rules")
 
     useEffect(() => {
         getPokemonData(pokemonArray).then((data) => {
@@ -51,7 +52,7 @@ export default function Game() {
     function handleCardClick(id) {
         if (data.length === 0) {return};
         if (clickedCardIds.includes(id)) {
-            handleResetGame()
+            handleResetGame(false)
             return;
         };
 
@@ -63,37 +64,49 @@ export default function Game() {
     }
 
     return (
-        <>
-        <Link to="/rules">Rules</Link>
-        {isLoading && 
-            <div role="status" className="loading-container">
-                Catching Pokemon...
-                <div className="circle"></div>
+  <>
+    {isRules ? (
+      <Outlet />
+    ) : (
+      <>
+        {isLoading && (
+          <div role="status" className="loading-container">
+            Catching Pokemon...
+            <div className="circle"></div>
+          </div>
+        )}
+
+        {!isLoading && (
+          <div className="cards-container">
+            <Link to="rules">RULES</Link>
+
+            <div className="score-container">
+              <p data-testid="best-score-container">Best Score: {bestScore}</p>
+              <p>Current Score: {currentScore}</p>
             </div>
-        }
-        {/* Data is hydrated */}
-        {!isLoading &&
-            <div className="cards-container">
-                <div className="score-container">
-                    <p data-testid="best-score-container">Best Score: {bestScore}</p>
-                    <p>Current Score: {currentScore}</p>
-                </div>
-                {data.map((pokemon) => {
-                    const rotation = Math.floor(Math.random() * 300);
-                    return <Card 
-                        name={pokemon.name} 
-                        image={pokemon.image} 
-                        key={pokemon.id}
-                        onClick={() => {handleCardClick(pokemon.id)}}
-                        rotation={rotation}
-                        isHardMode={isHardMode}
-                    />
-                })}
-            </div>
-        }
-        {hasWon && <WinDialog handleResetGame={handleResetGame}/>}
-        </>
-    )
+
+            {data.map((pokemon) => {
+              const rotation = Math.floor(Math.random() * 300);
+
+              return (
+                <Card
+                  name={pokemon.name}
+                  image={pokemon.image}
+                  key={pokemon.id}
+                  onClick={() => handleCardClick(pokemon.id)}
+                  rotation={rotation}
+                  isHardMode={isHardMode}
+                />
+              );
+            })}
+          </div>
+        )}
+
+        {hasWon && <WinDialog handleResetGame={handleResetGame} />}
+      </>
+    )}
+  </>
+);
 }
 
 export function shuffle(array) {
