@@ -22,8 +22,10 @@ export default function RouterComponent() {
 
     return (
         <div>
-            <div>Hello world</div>
+            <Game/>
             <Outlet />
         </div>
     )
 }
+
+// need to wire system so that state is preserved between screens
